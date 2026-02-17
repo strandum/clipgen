@@ -1,4 +1,3 @@
-print("DEPLOY TEST 1")
 import os
 import re
 import json
