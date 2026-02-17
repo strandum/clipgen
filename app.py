@@ -26,7 +26,7 @@ def read_status():
         write_status()
     return STATUS_FILE.read_text(encoding="utf-8")
 
-# ---------------- MAIN PAGE ---------------
+# ---------------- MAIN PAGE ----------------
 
 INDEX_HTML = """
 <!DOCTYPE html>
