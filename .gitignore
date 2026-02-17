@@ -1,0 +1,17 @@
+# venv
+.venv/
+
+# runtime/output
+work/
+output/
+status.json
+
+# secrets
+.env
+
+# python
+__pycache__/
+*.pyc
+
+# windows
+Thumbs.db
