@@ -374,7 +374,7 @@ def start():
             env["CLIP_LANGUAGE"] = language
 
             process = subprocess.Popen(
-                [sys.executable, "clipgen.py"],  # <-- BRUKER RIKTIG PYTHON
+                [sys.executable, "-m", "clipgen.core.pipeline"],
                 stdin=subprocess.PIPE,
                 env=env
             )

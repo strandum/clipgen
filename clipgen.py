@@ -1,10 +1,10 @@
 import os
-import re
-import json
 import sys
 import warnings
 import subprocess
 from pathlib import Path
+from services.status_service import update_status
+from services.utils import log, safe_name, unique_project_dir
 
 # --- Quiet down noisy libs (HF / symlink warnings etc.) ---
 warnings.filterwarnings("ignore")
@@ -16,7 +16,6 @@ from faster_whisper import WhisperModel
 BASE_DIR = Path(__file__).parent
 WORK_DIR = BASE_DIR / "work"
 OUTPUT_DIR = BASE_DIR / "output"
-STATUS_FILE = BASE_DIR / "status.json"
 
 WORK_DIR.mkdir(exist_ok=True)
 OUTPUT_DIR.mkdir(exist_ok=True)
@@ -24,47 +23,6 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 VERT_W = 720
 VERT_H = 1280
 SUB_MARGIN_V = 180
-
-
-# ---------------- Logging ----------------
-
-def log(msg: str):
-    print(f"[ClipGen] {msg}", flush=True)
-
-
-# ---------------- Status ----------------
-
-def update_status(message: str, progress: int, working: bool):
-    STATUS_FILE.write_text(
-        json.dumps({"message": message, "progress": int(progress), "working": bool(working)}),
-        encoding="utf-8"
-    )
-
-
-# ---------------- Utils ----------------
-
-def safe_name(name: str, max_len: int = 80) -> str:
-    name = name.strip()
-    name = re.sub(r"[\\/:\*\?\"<>\|]", "", name)       # remove invalid win chars
-    name = re.sub(r"\s+", " ", name)
-    name = name[:max_len].strip()
-    return name or "Project"
-
-
-def unique_project_dir(base_name: str) -> Path:
-    d = OUTPUT_DIR / base_name
-    if not d.exists():
-        d.mkdir(parents=True, exist_ok=True)
-        return d
-
-    # Add suffix if exists
-    n = 2
-    while True:
-        dd = OUTPUT_DIR / f"{base_name} ({n})"
-        if not dd.exists():
-            dd.mkdir(parents=True, exist_ok=True)
-            return dd
-        n += 1
 
 
 # ---------------- YouTube download ----------------
